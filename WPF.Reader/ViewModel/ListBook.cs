@@ -7,7 +7,7 @@ using WPF.Reader.Service;
 
 namespace WPF.Reader.ViewModel
 {
-    internal class ListBook : INotifyPropertyChanged
+    public class ListBook : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -18,7 +18,13 @@ namespace WPF.Reader.ViewModel
 
         public ListBook()
         {
-            ItemSelectedCommand = new RelayCommand(book => { /* the livre devrais etre dans la variable book */ });
+            ItemSelectedCommand = new RelayCommand(book =>
+            {
+                var service = Ioc.Default.GetRequiredService<INavigationService>();
+                service.Navigate<DetailsBook>(book);
+            });
+            Ioc.Default.GetRequiredService<LibraryService>().GetBooks();
         }
+
     }
 }

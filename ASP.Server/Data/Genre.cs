@@ -8,13 +8,15 @@ namespace ASP.Server.Model
     public class Genre
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-
         [Key]
         public int Id { get; set; }
 
         // Mettez ici les propriété de votre livre: Nom et Livres associés
 
         // N'oublier pas qu'un genre peut avoir plusieur livres
+
+
+        public string Name { get; set; }
     }
 
 }

@@ -10,7 +10,6 @@ using ASP.Server.Database;
 
 namespace ASP.Server.Api
 {
-
     [Route("/api/[controller]/[action]")]
     [ApiController]
     public class BookController : ControllerBase
@@ -56,9 +55,49 @@ namespace ASP.Server.Api
 
 
         // Vous vous montre comment faire la 1er, a vous de la compléter et de faire les autres !
-        public ActionResult<List<Book>> GetBooks()
+        public ActionResult<List<BookView>> GetBooks(List<int> genresIds, int limit=10, int offset=0)
         {
-            throw new NotImplementedException("You have to do it youtself");
+            List<Book> books = null;
+            List<Genre> listGenres = new List<Genre>();
+            foreach (int gen in genresIds)
+            {
+                 var g = this.libraryDbContext.Genre.Find(gen);
+                 if (g != null)
+                 {
+                     listGenres.Add(g);
+                 }
+            }
+            if (listGenres.Count()>0) 
+            {
+                var exp = libraryDbContext.Books.Include(x => x.Genres).Where(x => x.Genres.Contains(listGenres[0]));
+                listGenres.ForEach(x =>
+                {
+                    exp = exp.Where(t => t.Genres.Contains(x));
+                });
+                books = exp.Where(b => b.Price > 0).Skip(offset).Take(limit).ToList();
+            }
+            else {
+                books =  libraryDbContext.Books.Include(x => x.Genres).Where(b => b.Price > 0).Skip(offset).Take(limit).ToList();
+            }
+            var bookViews = new List<BookView>();
+            foreach (Book book in books)
+            {
+                var bb = new BookView(){Id = book.Id, Author = book.Author, Name = book.Name, Price = book.Price};
+                bb.Genres = book.Genres;
+                bookViews.Add(bb);
+            }
+            return bookViews;
+        }
+
+        public ActionResult<Book> GetBook(int id)
+        {
+            return libraryDbContext.Books.Find(id);
+        }
+        public ActionResult<List<Genre>> GetGenres()
+        {
+            List<Genre> ListGenres = null;
+            ListGenres = this.libraryDbContext.Genre.ToList();
+            return ListGenres;
         }
 
     }

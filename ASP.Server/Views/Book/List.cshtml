@@ -3,12 +3,54 @@
 @{
     ViewData["Title"] = "Home Page";
 }
+<style type="text/css">
+    tr > th {
+        padding: 5px;
+        padding-left: 20px;
+        border: thin solid black;
+    }
+    tr+tr {
+        border: thin solid black;
+        padding-top: 10px;
+    }
+</style>
 
 <div class="listeBooks">
     <h1>Liste des livres:</h1>
+<table>
+
+<tbody>
+    <tr>
+    <th>Nom</th>
+    <th>Autheur</th>
+    <th>Prix</th>
+    <th>Genres</th>
+    <th>Operation</th>
+    <th>Contenu</th>
+    </tr>   
     <!-- la liste des genres est dans la variable Model qui est typé en ligne 3, elle correspond à la variable xxx dans View(xxx) du controller -->
     @foreach (var book in Model)
-    {
+    { 
+        <tr>
+                    <th>@book.Name</th>
+                    <th>@book.Author</th>
+                    <th>@book.Price</th>
+                    <th>@foreach (var genre in book.Genres)
+                        {
+                            <span>@genre.Name</span>
+                        }
+                    </th>
+                <th>
+                <a asp-controller="Book" asp-action="Delete" asp-route-id="@book.Id">Delete</a>
+                </th>
+                <th>
+                <div style="text-indent: 2em">
+                    <p>@book.Content</p>
+                </div>
+                </th>
+        </tr>
     }
+</tbody>    
+</table>
 </div>
 

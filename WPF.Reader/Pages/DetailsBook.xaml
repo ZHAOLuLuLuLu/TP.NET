@@ -10,7 +10,7 @@
       d:DataContext="{d:DesignInstance Type=vm:InDesignDetailsBook, d:IsDesignTimeCreatable=True}"
       Title="DetailsBook">
 
-    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+    <Grid ShowGridLines="true">
         <Grid.RowDefinitions>
             <RowDefinition Height="50" />
             <RowDefinition Height="*" />
@@ -18,5 +18,26 @@
         <!-- il faut afficher les information du livre: Nom, Auteur, Prix, Genres-->
         <!-- Mais pas le contenu ! -->
         <!-- N'oublier pas le bouton pour aller lire le livre. La commande ReadCommand est faite pour ca ! -->
+        <TextBlock Text="Genre:" Margin="0,63,743,287" Grid.Row="1" />
+        <ListBox
+            ItemsSource="{Binding CurrentBook.Genres}" RenderTransformOrigin="3.804,0.432" Margin="62,65,602,260" Grid.Row="1">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}" />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <TextBlock Text="{Binding CurrentBook.Name}" Margin="0,5,342,5" FontFamily="Adobe Gothic Std B" FontSize="20" />
+        <TextBlock Text="Author: " Margin="0,5,743,370" Grid.Row="1" />
+        <TextBlock Text="{Binding CurrentBook.Author}" Margin="62,5,231,370" Grid.Row="1" FontSize="14" />
+        <TextBlock Text="Price: " Grid.Row="1" Margin="0,35,743,340" />
+        <TextBlock Text="{Binding CurrentBook.Price}" Margin="62,35,664,342" Grid.Row="1" />
+        <Button
+            Command="{Binding DataContext.ReadCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}" 
+            CommandParameter="{Binding CurrentBook}"
+            VerticalAlignment="Top"
+            DockPanel.Dock="Right" Margin="706,5,10,0" Height="44" RenderTransformOrigin="1.571,1.432">
+            <TextBlock Text="Read" />
+        </Button>
     </Grid>
 </Page>
